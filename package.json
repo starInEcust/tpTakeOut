@@ -1,0 +1,15 @@
+{
+  "name": "tpTakeOut",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "*",
+    "express": "^4.10.6",
+    "express-handlebars": "^1.1.0",
+    "jade": "^1.8.2",
+    "socket.io": "^1.2.1"
+  }
+}
