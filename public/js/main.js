@@ -4,9 +4,10 @@
 //	socket.emit('my other event', { my: 'data' });
 //});
 $(document).ready(function () {
-
+	$('.tools-wrap').width(($(document).width() - 80) / 2 );
 });
 (function () {
+	var theTime = new Date();
 	function checkTime(i) {
 		if (i < 0) {
 			return "00";
@@ -16,7 +17,6 @@ $(document).ready(function () {
 		}
 		return i;
 	}
-	var theTime = new Date(time);
 	function timer() {
 		var ts = (theTime.getTime()) - (new Date().getTime());//计算剩余的毫秒数
 		var hh = parseInt(ts / 1000 / 60 / 60, 10);//计算剩余的小时数

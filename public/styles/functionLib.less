@@ -192,7 +192,7 @@
 
 
 //iteration-count:infinite 无限
-.animate(@name,@duration:0.7s,@iteration-count:infinite,@delay:0s,@fill-mode:forwards,@timeFunction:linear) {
+.animate(@name,@duration:0.7s,@iteration-count:infinite,@delay:0s,@fill-mode:forwards,@timeFunction:ease) {
 	-webkit-animation-name: @name;
 	-webkit-animation-duration: @duration;
 	-webkit-animation-iteration-count: @iteration-count;
@@ -210,7 +210,6 @@
 .perspective(@d:500px) {
 	-webkit-perspective: @d;
 	-moz-perspective: @d;
-	-ms-perspective: @d;
 	perspective: @d;
 }
 
@@ -221,10 +220,9 @@
 	transform-style: @type;
 }
 
-.transition(@property:all,@duration:1s,@timing:ease,@delay:0) {
+.transition(@duration:1s,@property:all,@timing:ease,@delay:0) {
 	-webkit-transition: @property @duration @timing @delay;
 	-moz-transition: @property @duration @timing @delay;
-	-ms-transition: @property @duration @timing @delay;
 	-o-transition: @property @duration @timing @delay;
 	transition: @property @duration @timing @delay;
 }
@@ -233,12 +231,12 @@
 	-webkit-transform: @args;
 	transform: @args;
 }
-
+.origin2D(@x, @y){
+	-webkit-transform-origin:@x @y;
+	transform-origin:@x @y;
+}
 .rotate(@deg) {
-	-moz-transform: rotate(@deg);
 	-webkit-transform: rotate(@deg);
-	-o-transform: rotate(@deg);
-	-ms-transform: rotate(@deg);
 	transform: rotate(@deg);
 }
 
@@ -265,4 +263,7 @@
 .scaleZ(@per) {
 	-webkit-transform: scaleZ(@x,@y);
 	transform: scaleZ(@x,@y);
+}
+.pSpeed(){
+	-webkit-transform:transition3d(0,0,0);
 }

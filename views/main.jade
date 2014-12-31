@@ -11,13 +11,23 @@ html(lang="en")
 		section.title= dateText + '订餐统计'
 			span.countDown
 		.container
-			section.show-content hehehe
-			section
-				span.sum sum
-				span.num 20
-			div.button-wrap
-				button.plus-one +1
-				button.add-text 需求
+			section.show-content
+				ul
+					li 海潮叔叔 + 1
+					li 甜姨 + 1
+					li neeya小傻子 + 1
+			section.show-sum
+				div.sum-content
+					span.sum sum
+					span.num 20
+			div.tools-bar.clearfix
+				div.tools-wrap.left.clearfix
+					div.add-text 需求
+					div.change-name 改名
+				div.plus-one +1
+				div.tools-wrap.right.clearfix
+					div.detail 详情
+					div.feedback 反馈
 		script(type='text/javascript',src='/js/zepto.js')
 		script(type='text/javascript',src='/js/touch.js')
 		script(type='text/javascript',src='/js/main.js')
