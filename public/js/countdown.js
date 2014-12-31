@@ -1,123 +1,121 @@
-(function () {
-	function DrawNum() {
-		this.WINDOW_WIDTH
-	}
-	var WINDOW_WIDTH = 1024;
-	var WINDOW_HEIGHT = 768;
-	var RADIUS = 8;
-	var MARGIN_TOP = 60;
-	var MARGIN_LEFT = 30;
-	var numOld = 0;
-	window.numNow = 0;
-	var balls = [];
-	const colors = ["#33B5E5", "#0099CC", "#AA66CC", "#9933CC", "#99CC00", "#669900", "#FFBB33", "#FF8800", "#FF4444", "#CC0000"];
-
-	window.onload = function () {
-
-		WINDOW_WIDTH = $('.show-content').width();
-		WINDOW_HEIGHT = 200;
-
-		MARGIN_LEFT = Math.round(WINDOW_WIDTH / 10);
-		RADIUS = Math.round(WINDOW_WIDTH * 4 / 5 / 108) - 1;
-
-		MARGIN_TOP = Math.round(WINDOW_HEIGHT / 5);
-
-		var canvas = document.getElementById('sum');
-		var context = canvas.getContext("2d");
-
-		canvas.width = WINDOW_WIDTH;
-		canvas.height = WINDOW_HEIGHT;
-		setInterval(
-			function () {
-				render(context);
-				update();
+function DrawNum() {
+	this.numOld = 0;
+	this.numNow = 0;
+	this.balls = [];
+	this.colors = ["#33B5E5", "#0099CC", "#AA66CC", "#9933CC", "#99CC00", "#669900", "#FFBB33", "#FF8800", "#FF4444", "#CC0000"];
+	this.fillStyleColor = "rgb(255,255,255)";
+}
+DrawNum.prototype.initAnimate = function (canvasId, w, h) {
+	this.WINDOW_WIDTH = w;
+	this.WINDOW_HEIGHT = h;
+	this.RADIUS = Math.round(this.WINDOW_WIDTH * 4 / 5 / 54) - 1;
+	this.MARGIN_TOP = Math.round(this.WINDOW_HEIGHT / 5);
+	this.terval = 18 * (this.RADIUS + 1);
+	var canvas = document.getElementById(canvasId);
+	var context = canvas.getContext("2d");
+	canvas.width = this.WINDOW_WIDTH;
+	canvas.height = this.WINDOW_HEIGHT;
+	var self = this;
+	setInterval(function () {
+		self.render(context);
+		self.update();
+	}, 50);
+};
+DrawNum.prototype.renderDigit = function (x, y, num, cxt) {
+	cxt.fillStyle = this.fillStyleColor;
+	for (var i = 0; i < digit[num].length; i++)
+		for (var j = 0; j < digit[num][i].length; j++)
+			if (digit[num][i][j] == 1) {
+				cxt.beginPath();
+				cxt.arc(x + j * 2 * (this.RADIUS + 1) + (this.RADIUS + 1), y + i * 2 * (this.RADIUS + 1) + (this.RADIUS + 1), this.RADIUS, 0, 2 * Math.PI);
+				cxt.closePath();
+				cxt.fill();
 			}
-			,
-			50
-		);
-	};
+};
+DrawNum.prototype.render = function (cxt) {
+	cxt.clearRect(0, 0, this.WINDOW_WIDTH, this.WINDOW_HEIGHT);
+	var numArray = this.numCovert(this.numNow);
+	this.startPointX = Math.round(this.WINDOW_WIDTH / 2) - this.terval * numArray.length / 2;
 
-	function update() {
-		if (numOld != window.numNow){
-			addBalls(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, numOld);
-			numOld = window.numNow;
-		}
-		updateBalls();
-
-		console.log(balls.length)
+	for (var k = 0; k < numArray.length; k++) {
+		this.renderDigit(this.startPointX + this.terval * k, this.MARGIN_TOP, numArray[k], cxt);
 	}
 
-	function updateBalls() {
+	for (var i = 0; i < this.balls.length; i++) {
+		cxt.fillStyle = this.balls[i].color;
 
-		for (var i = 0; i < balls.length; i++) {
+		cxt.beginPath();
+		cxt.arc(this.balls[i].x, this.balls[i].y, this.RADIUS, 0, 2 * Math.PI, true);
+		cxt.closePath();
 
-			balls[i].x += balls[i].vx;
-			balls[i].y += balls[i].vy;
-			balls[i].vy += balls[i].g;
-
-			if (balls[i].y >= WINDOW_HEIGHT - RADIUS) {
-				balls[i].y = WINDOW_HEIGHT - RADIUS;
-				balls[i].vy = -balls[i].vy * 0.75;
+		cxt.fill();
+	}
+};
+DrawNum.prototype.update = function () {
+	if (this.numOld != this.numNow) {
+		var numArrayOld = this.numCovert(this.numOld);
+		var numArrayNum = this.numCovert(this.numNow);
+		for (var k = 0; k < numArrayOld.length; k++) {
+			if(numArrayNum[k] != numArrayOld[k]){
+				this.addBalls(this.startPointX + this.terval * k, this.MARGIN_TOP, numArrayOld[k]);
 			}
 		}
+		this.numOld = this.numNow;
+	}
+	this.updateBalls();
+};
+DrawNum.prototype.numCovert = function (toCovertNum) {
+	var numArray = [];
+	var num = toCovertNum;
+	for (; String(num).length > 1; num = parseInt(num / 10)) {
+		//console.log(num, num % 10);
+		numArray.push(num % 10);
+	}
+	if (String(num).length = 1) {
+		numArray.push(num % 10);
+	}
+	return numArray.reverse();
+};
+DrawNum.prototype.addBalls = function (x, y, num) {
 
-		var cnt = 0;
-		for (var i = 0; i < balls.length; i++)
-			if (balls[i].x + RADIUS > 0 && balls[i].x - RADIUS < WINDOW_WIDTH)
-				balls[cnt++] = balls[i]
+	for (var i = 0; i < digit[num].length; i++)
+		for (var j = 0; j < digit[num][i].length; j++)
+			if (digit[num][i][j] == 1) {
+				var aBall = {
+					x: x + j * 2 * (this.RADIUS + 1) + (this.RADIUS + 1),
+					y: y + i * 2 * (this.RADIUS + 1) + (this.RADIUS + 1),
+					g: 1.5 + Math.random(),
+					vx: Math.pow(-1, Math.ceil(Math.random() * 1000)) * 4,
+					vy: -5,
+					color: this.colors[Math.floor(Math.random() * this.colors.length)]
+				};
+				this.balls.push(aBall)
+			}
+};
 
-		while (balls.length > cnt) {
-			balls.pop();
+DrawNum.prototype.updateBalls = function () {
+	for (var i = 0; i < this.balls.length; i++) {
+		this.balls[i].x += this.balls[i].vx;
+		this.balls[i].y += this.balls[i].vy;
+		this.balls[i].vy += this.balls[i].g;
+
+		if (this.balls[i].y >= this.WINDOW_HEIGHT - this.RADIUS) {
+			this.balls[i].y = this.WINDOW_HEIGHT - this.RADIUS;
+			this.balls[i].vy = -this.balls[i].vy * 0.75;
 		}
 	}
 
-	function addBalls(x, y, num) {
+	var cnt = 0;
+	for (var i = 0; i < this.balls.length; i++)
+		if (this.balls[i].x + this.RADIUS > 0 && this.balls[i].x - this.RADIUS < this.WINDOW_WIDTH)
+			this.balls[cnt++] = this.balls[i];
 
-		for (var i = 0; i < digit[num].length; i++)
-			for (var j = 0; j < digit[num][i].length; j++)
-				if (digit[num][i][j] == 1) {
-					var aBall = {
-						x: x + j * 2 * (RADIUS + 1) + (RADIUS + 1),
-						y: y + i * 2 * (RADIUS + 1) + (RADIUS + 1),
-						g: 1.5 + Math.random(),
-						vx: Math.pow(-1, Math.ceil(Math.random() * 1000)) * 4,
-						vy: -5,
-						color: colors[Math.floor(Math.random() * colors.length)]
-					};
-					balls.push(aBall)
-				}
+	while (this.balls.length > cnt) {
+		this.balls.pop();
 	}
+};
 
-	function render(cxt) {
+DrawNum.prototype.set = function (key, value) {
+	this[key] = value;
+};
 
-		cxt.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-
-		renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, window.numNow, cxt);
-
-		for (var i = 0; i < balls.length; i++) {
-			cxt.fillStyle = balls[i].color;
-
-			cxt.beginPath();
-			cxt.arc(balls[i].x, balls[i].y, RADIUS, 0, 2 * Math.PI, true);
-			cxt.closePath();
-
-			cxt.fill();
-		}
-	}
-
-	function renderDigit(x, y, num, cxt) {
-
-		cxt.fillStyle = "rgb(0,102,153)";
-
-		for (var i = 0; i < digit[num].length; i++)
-			for (var j = 0; j < digit[num][i].length; j++)
-				if (digit[num][i][j] == 1) {
-					cxt.beginPath();
-					cxt.arc(x + j * 2 * (RADIUS + 1) + (RADIUS + 1), y + i * 2 * (RADIUS + 1) + (RADIUS + 1), RADIUS, 0, 2 * Math.PI);
-					cxt.closePath();
-					cxt.fill();
-				}
-	}
-
-})();

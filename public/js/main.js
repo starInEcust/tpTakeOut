@@ -5,8 +5,10 @@
 //});
 $(document).ready(function () {
 	$('.tools-wrap').width(($(document).width() - 80) / 2 );
+	var numAnimate = new DrawNum();
+	numAnimate.initAnimate('sum', $('.show-content').width(), 200);
 	$('#plusOne').on('tap', function () {
-		window.numNow += 1;
+		numAnimate.numNow++;
 	});
 });
 (function () {
