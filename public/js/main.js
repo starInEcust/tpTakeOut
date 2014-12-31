@@ -5,6 +5,9 @@
 //});
 $(document).ready(function () {
 	$('.tools-wrap').width(($(document).width() - 80) / 2 );
+	$('#plusOne').on('tap', function () {
+		window.numNow += 1;
+	});
 });
 (function () {
 	var theTime = new Date();
