@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{tpTakeOut node_modules}" />
+    <file url="file://$PROJECT_DIR$/server.js" libraries="{Node.js Globals, Node.js v0.10.18 Core Modules, Node.js v0.10.26 Core Modules, Node.js v0.10.35 Core Modules, express-DefinitelyTyped}" />
   </component>
 </project>

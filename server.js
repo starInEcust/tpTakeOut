@@ -37,12 +37,16 @@
 
 var express = require('express');
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var exphbs  = require('express-handlebars');
 var path = require('path');
 app.set('views', path.join(__dirname, 'views'));
 app.engine('jade', require('jade').__express);
 app.set('view engine', 'jade');
+app.set('port', process.env.PORT || 3000);
 app.use(express.static('public'));
+app.use(express.static('socket.io'));
 //app.engine('.hbs', exphbs({
 //	//layoutsDir: './views/layouts/',
 //	//defaultLayout: 'main',
@@ -62,6 +66,13 @@ app.get('/', function (req, res) {
 app.get('/hello.txt', function(req, res){
 	res.send('Hello World');
 });
-var server = app.listen(3000, function() {
-	console.log('Listening on port %d', server.address().port);
+
+io.on('connection', function (socket) {
+	socket.emit('news', { hello: 'world' });
+	socket.on('my other event', function (data) {
+		console.log(data);
+	});
+});
+server.listen(app.get('port'), function() {
+	console.log('Listening on port %d', app.get('port'));
 });

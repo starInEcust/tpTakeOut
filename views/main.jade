@@ -30,4 +30,13 @@ html(lang="en")
 		script(type='text/javascript',src='/js/touch.js')
 		script(type='text/javascript',src='/js/digit.js')
 		script(type='text/javascript',src='/js/countdown.js')
+		script(type='text/javascript',src='/socket.io/socket.io.js')
+		script.
+			var socket = io(window.location.host);
+			console.log(window.location.host);
+			socket.on('news', function (data) {
+				console.log(data);
+				socket.emit('my other event', { my: 'data' });
+			});
+
 		script(type='text/javascript',src='/js/main.js')
