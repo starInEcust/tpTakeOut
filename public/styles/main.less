@@ -1,6 +1,7 @@
 @import "var";
 @import "base";
 @import "functionLib";
+@import "animate";
 body, html {
 	height: 100%;
 	background:center no-repeat url('/images/ice-cream.jpg');
@@ -51,6 +52,14 @@ body, html {
 	line-height: 40px;
 	width: 100%;
 	.plus-one{
+		background-color: #33ccff;
+		font-size: 26px;
+		.animate('moveButton',3s);
+		span{
+			.animate('scalePlusOne', 1s);
+		}
+	}
+	.main-button{
 		position: absolute;
 		@R:80px;
 		width: @R;
@@ -59,8 +68,6 @@ body, html {
 		color: #ffffff;
 		text-align: center;
 		line-height: @R;
-		font-size: 26px;
-		background-color: #33ccff;
 		bottom: 5px;
 		left: 50%;
 		margin-left: -@R / 2;
