@@ -213,7 +213,6 @@ pip-log.txt
 
 #Mr Developer fx
 .mr.developer.cfg
-.idea/
 images/ui-icons
 scripts/bower_components
 
